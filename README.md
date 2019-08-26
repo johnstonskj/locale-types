@@ -27,4 +27,5 @@ println!("{}", locale);
 
 ## History
 
+* **0.3.0** - updated module structure.
 * **0.1.0** - extracted from [simple-locale](https://github.com/johnstonskj/simple-locale).
