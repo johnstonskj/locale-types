@@ -7,8 +7,8 @@
 ![mit License](https://img.shields.io/badge/license-mit-118811.svg)
 [![GitHub stars](https://img.shields.io/github/stars/johnstonskj/locale-types.svg)](https://github.com/johnstonskj/locale-types/stargazers)
 
-This crate provides a `Locale` enumeration, and a `LocaleString` 
-structure are provided that may be used to parse and construct 
+This crate provides a `Locale` enumeration, `LocaleIdentifier` trait, and a 
+`LocaleString` structure are provided that may be used to parse and construct 
 locale identifiers in a standards-conformant manner.
 
 It is used by the `locale-codes` and `locale-settings` crates.
@@ -16,7 +16,7 @@ It is used by the `locale-codes` and `locale-settings` crates.
 ## Example
 
 ```rust
-use simple_locale::LocaleString;
+use locale_types::{LocaleIdentifier, LocaleString};
 
 let locale = LocaleString::new("en".to_string())
     .with_territory("US".to_string())

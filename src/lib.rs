@@ -1,7 +1,8 @@
 /*!
 Idiomatic types for locale identifiers.
 
-This crate provides a [`Locale`](locale/enum.Locale.html) enumeration, and a
+This crate provides a [`Locale`](locale/enum.Locale.html) enumeration,
+[`LocaleIdentifier`](id/trait.LocaleIdentifier.html) trait, and a
 [`LocaleString`](string/struct.LocaleString.html) structure are provided that
 may be used to parse and construct locale identifiers in a
 standards-conformant manner.
