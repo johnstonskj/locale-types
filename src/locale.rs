@@ -139,9 +139,9 @@ impl FromStr for Locale {
 
 #[cfg(test)]
 mod tests {
+    use crate::{Locale, LocaleIdentifier, LocaleString};
     use std::path::PathBuf;
     use std::str::FromStr;
-    use crate::{Locale, LocaleIdentifier, LocaleString};
 
     // --------------------------------------------------------------------------------------------
     #[test]

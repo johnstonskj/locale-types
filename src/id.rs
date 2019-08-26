@@ -8,7 +8,10 @@ use std::fmt::Display;
 // Public Types
 // ------------------------------------------------------------------------------------------------
 
-pub trait LocaleIdentifier where Self: Sized {
+pub trait LocaleIdentifier
+where
+    Self: Sized,
+{
     fn new(language_code: String) -> Self;
 
     fn with_language(&self, language_code: String) -> Self;
@@ -20,9 +23,9 @@ pub trait LocaleIdentifier where Self: Sized {
     fn with_modifier(&self, modifier: String) -> Self;
 
     fn with_modifiers<K, V>(&self, modifiers: HashMap<K, V>) -> Self
-        where
-            K: Display,
-            V: Display;
+    where
+        K: Display,
+        V: Display;
 
     fn language_code(&self) -> String;
 
@@ -32,4 +35,3 @@ pub trait LocaleIdentifier where Self: Sized {
 
     fn modifier(&self) -> Option<String>;
 }
-
