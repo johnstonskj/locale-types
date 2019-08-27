@@ -1,5 +1,14 @@
 /*!
 Provides a single trait that describes common structure for local identifiers.
+
+A locale identifier is comprised of, at least, the following components:
+
+1. a `language` identifier, ...
+2. a `territory`, or `country`, identifier, ...
+3. a `code_set`, or `charset`, identifier, ...
+4. a `territory`, or `country`, identifier, ...
+5. a `modifier` string (commonly used to identify the script) ...
+
 */
 use std::collections::HashMap;
 use std::fmt::Display;
@@ -37,10 +46,10 @@ where
     /// Return the current language code.
     fn language_code(&self) -> String;
 
-    /// Return the current territory code.
+    /// Return the current territory/country code.
     fn territory(&self) -> Option<String>;
 
-    /// Return the current code set code.
+    /// Return the current code set/charset code.
     fn code_set(&self) -> Option<String>;
 
     /// Return the current modifier string.
