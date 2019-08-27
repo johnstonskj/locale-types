@@ -96,7 +96,7 @@ const L_POSIX: &'static str = "POSIX";
 const L_PATH_SEP: &'static str = "/";
 
 impl Display for Locale {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",
