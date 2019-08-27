@@ -157,9 +157,9 @@ mod tests {
 
     #[test]
     fn test_string_to_string() {
-        let locale = LocaleString::new("en".to_string())
-            .with_territory("US".to_string())
-            .with_code_set("UTF-8".to_string());
+        let locale = LocaleString::new("en".to_string()).unwrap()
+            .with_territory("US".to_string()).unwrap()
+            .with_code_set("UTF-8".to_string()).unwrap();
         assert_eq!(locale.to_string(), "en_US.UTF-8");
     }
 

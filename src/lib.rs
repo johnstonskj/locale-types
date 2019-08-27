@@ -12,10 +12,10 @@ standards-conformant manner.
 ```
 use locale_types::{LocaleIdentifier, LocaleString};
 
-let locale = LocaleString::new("en".to_string())
-    .with_territory("US".to_string())
-    .with_code_set("UTF-8".to_string())
-    .with_modifier("collation=pinyin;currency=CNY".to_string());
+let locale = LocaleString::new("en".to_string()).unwrap()
+    .with_territory("US".to_string()).unwrap()
+    .with_code_set("UTF-8".to_string()).unwrap()
+    .with_modifier("collation=pinyin;currency=CNY".to_string()).unwrap();
 println!("{}", locale);
 ```
 

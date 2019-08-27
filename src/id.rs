@@ -12,6 +12,7 @@ A locale identifier is comprised of, at least, the following components:
 */
 use std::collections::HashMap;
 use std::fmt::Display;
+use crate::LocaleResult;
 
 // ------------------------------------------------------------------------------------------------
 // Public Types
@@ -23,22 +24,22 @@ where
     Self: Sized,
 {
     /// Construct a new identifier with the given language code only.
-    fn new(language_code: String) -> Self;
+    fn new(language_code: String) -> LocaleResult<Self>;
 
     /// Return a new identifier based on `self` with a new language code.
-    fn with_language(&self, language_code: String) -> Self;
+    fn with_language(&self, language_code: String) -> LocaleResult<Self>;
 
     /// Return a new identifier based on `self` with a new territory code.
-    fn with_territory(&self, territory: String) -> Self;
+    fn with_territory(&self, territory: String) -> LocaleResult<Self>;
 
     /// Return a new identifier based on `self` with a new code_set code.
-    fn with_code_set(&self, code_set: String) -> Self;
+    fn with_code_set(&self, code_set: String) -> LocaleResult<Self>;
 
     /// Return a new identifier based on `self` with a new modifier string.
-    fn with_modifier(&self, modifier: String) -> Self;
+    fn with_modifier(&self, modifier: String) -> LocaleResult<Self>;
 
     /// Return a new identifier based on `self` with a new modifier string.
-    fn with_modifiers<K, V>(&self, modifiers: HashMap<K, V>) -> Self
+    fn with_modifiers<K, V>(&self, modifiers: HashMap<K, V>) -> LocaleResult<Self>
     where
         K: Display,
         V: Display;
