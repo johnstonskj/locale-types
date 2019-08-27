@@ -36,7 +36,7 @@ extern crate lazy_static;
 // ------------------------------------------------------------------------------------------------
 
 /// Common error type for functions in this crate.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum LocaleError {
     /// The provided locale string was badly formatted
     InvalidLocaleString,

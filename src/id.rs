@@ -10,9 +10,9 @@ A locale identifier is comprised of, at least, the following components:
 5. a `modifier` string (commonly used to identify the script) ...
 
 */
+use crate::LocaleResult;
 use std::collections::HashMap;
 use std::fmt::Display;
-use crate::LocaleResult;
 
 // ------------------------------------------------------------------------------------------------
 // Public Types

@@ -45,8 +45,8 @@ use std::str::FromStr;
 
 use regex::Regex;
 
-use crate::LocaleResult;
 use crate::id::LocaleIdentifier;
+use crate::{LocaleError, LocaleResult};
 
 // ------------------------------------------------------------------------------------------------
 // Public Types
@@ -94,16 +94,10 @@ const SEP_MODIFIER: char = '@';
 
 impl LocaleIdentifier for LocaleString {
     fn new(language_code: String) -> LocaleResult<Self> {
-        assert_eq!(
-            language_code.len(),
-            2,
-            "language codes are two character only"
-        );
-        assert_eq!(
-            language_code.chars().all(|c| c.is_lowercase()),
-            true,
-            "language codes are lower case only"
-        );
+        if language_code.len() != 2 || !language_code.chars().all(|c| c.is_lowercase()) {
+            return Err(LocaleError::InvalidLanguageCode);
+        };
+
         Ok(LocaleString {
             language_code,
             territory: None,
@@ -113,16 +107,10 @@ impl LocaleIdentifier for LocaleString {
     }
 
     fn with_language(&self, language_code: String) -> LocaleResult<Self> {
-        assert_eq!(
-            language_code.len(),
-            2,
-            "language codes are two character only"
-        );
-        assert_eq!(
-            language_code.chars().all(|c| c.is_lowercase()),
-            true,
-            "language codes are lower case only"
-        );
+        if language_code.len() != 2 || !language_code.chars().all(|c| c.is_lowercase()) {
+            return Err(LocaleError::InvalidLanguageCode);
+        };
+
         Ok(LocaleString {
             language_code,
             territory: self.territory.clone(),
@@ -132,12 +120,13 @@ impl LocaleIdentifier for LocaleString {
     }
 
     fn with_territory(&self, territory: String) -> LocaleResult<Self> {
-        assert_eq!(territory.len(), 2, "territory codes are two character only");
-        assert_eq!(
-            territory.chars().all(|c| c.is_uppercase()),
-            true,
-            "territory codes are upper case only"
-        );
+        if territory.len() < 2
+            || territory.len() > 2
+            || !territory.chars().all(|c| c.is_uppercase())
+        {
+            return Err(LocaleError::InvalidTerritoryCode);
+        };
+
         Ok(LocaleString {
             language_code: self.language_code.clone(),
             territory: Some(territory),
@@ -147,6 +136,9 @@ impl LocaleIdentifier for LocaleString {
     }
 
     fn with_code_set(&self, code_set: String) -> LocaleResult<Self> {
+        if code_set.chars().all(|c| c.is_whitespace()) {
+            return Err(LocaleError::InvalidCodeSet);
+        };
         Ok(LocaleString {
             language_code: self.language_code.clone(),
             territory: self.territory.clone(),
@@ -245,15 +237,22 @@ impl FromStr for LocaleString {
         match RE.captures(s) {
             None => Err(ParseError::RegexFailure),
             Some(groups) => {
-                let mut locale = LocaleString::new(groups.get(1).unwrap().as_str().to_string()).unwrap();
+                let mut locale =
+                    LocaleString::new(groups.get(1).unwrap().as_str().to_string()).unwrap();
                 if let Some(group_str) = groups.get(2) {
-                    locale = locale.with_territory(group_str.as_str()[1..].to_string()).unwrap();
+                    locale = locale
+                        .with_territory(group_str.as_str()[1..].to_string())
+                        .unwrap();
                 }
                 if let Some(group_str) = groups.get(3) {
-                    locale = locale.with_code_set(group_str.as_str()[1..].to_string()).unwrap();
+                    locale = locale
+                        .with_code_set(group_str.as_str()[1..].to_string())
+                        .unwrap();
                 }
                 if let Some(group_str) = groups.get(4) {
-                    locale = locale.with_modifier(group_str.as_str()[1..].to_string()).unwrap();
+                    locale = locale
+                        .with_modifier(group_str.as_str()[1..].to_string())
+                        .unwrap();
                 }
                 Ok(locale)
             }
@@ -270,32 +269,43 @@ mod tests {
     use std::collections::HashMap;
     use std::str::FromStr;
 
-    use crate::LocaleIdentifier;
-    use crate::LocaleString;
+    use crate::{LocaleError, LocaleIdentifier, LocaleString};
 
     // --------------------------------------------------------------------------------------------
     #[test]
-    #[should_panic(expected = "language codes are two character only")]
     fn test_bad_constructor_length() {
-        LocaleString::new("english".to_string()).unwrap();
+        assert_eq!(
+            LocaleString::new("english".to_string()),
+            Err(LocaleError::InvalidLanguageCode)
+        );
     }
 
     #[test]
-    #[should_panic(expected = "language codes are lower case only")]
     fn test_bad_constructor_case() {
-        LocaleString::new("EN".to_string()).unwrap();
+        assert_eq!(
+            LocaleString::new("EN".to_string()),
+            Err(LocaleError::InvalidLanguageCode)
+        );
     }
 
     #[test]
-    #[should_panic(expected = "territory codes are two character only")]
-    fn test_bad_country_length() {
-        LocaleString::new("en".to_string()).unwrap().with_territory("USA".to_string()).unwrap();
+    fn test_bad_territory_length() {
+        assert_eq!(
+            LocaleString::new("en".to_string())
+                .unwrap()
+                .with_territory("USA".to_string()),
+            Err(LocaleError::InvalidTerritoryCode)
+        );
     }
 
     #[test]
-    #[should_panic(expected = "territory codes are upper case only")]
     fn test_bad_country_case() {
-        LocaleString::new("en".to_string()).unwrap().with_territory("us".to_string()).unwrap();
+        assert_eq!(
+            LocaleString::new("en".to_string())
+                .unwrap()
+                .with_territory("us".to_string()),
+            Err(LocaleError::InvalidTerritoryCode)
+        );
     }
 
     // --------------------------------------------------------------------------------------------
@@ -311,7 +321,10 @@ mod tests {
     fn test_with_language() {
         let locale = LocaleString::new("en".to_string()).unwrap();
         assert_eq!(
-            locale.with_language("fr".to_string()).unwrap().language_code(),
+            locale
+                .with_language("fr".to_string())
+                .unwrap()
+                .language_code(),
             "fr".to_string()
         );
     }
@@ -329,7 +342,10 @@ mod tests {
     fn test_with_code_set() {
         let locale = LocaleString::new("en".to_string()).unwrap();
         assert_eq!(
-            locale.with_code_set("UTF-8".to_string()).unwrap().code_set(),
+            locale
+                .with_code_set("UTF-8".to_string())
+                .unwrap()
+                .code_set(),
             Some("UTF-8".to_string())
         );
     }
@@ -339,7 +355,8 @@ mod tests {
         let locale = LocaleString::new("en".to_string()).unwrap();
         assert_eq!(
             locale
-                .with_modifier("collation=pinyin;currency=CNY".to_string()).unwrap()
+                .with_modifier("collation=pinyin;currency=CNY".to_string())
+                .unwrap()
                 .modifier(),
             Some("collation=pinyin;currency=CNY".to_string())
         );
@@ -353,7 +370,8 @@ mod tests {
             .cloned()
             .collect();
         assert!(locale
-            .with_modifiers(modifiers).unwrap()
+            .with_modifiers(modifiers)
+            .unwrap()
             .modifier()
             .unwrap()
             .contains("collation=pinyin"));
@@ -365,10 +383,14 @@ mod tests {
     // --------------------------------------------------------------------------------------------
     #[test]
     fn test_to_string() {
-        let locale = LocaleString::new("en".to_string()).unwrap()
-            .with_territory("US".to_string()).unwrap()
-            .with_code_set("UTF-8".to_string()).unwrap()
-            .with_modifier("collation=pinyin;currency=CNY".to_string()).unwrap();
+        let locale = LocaleString::new("en".to_string())
+            .unwrap()
+            .with_territory("US".to_string())
+            .unwrap()
+            .with_code_set("UTF-8".to_string())
+            .unwrap()
+            .with_modifier("collation=pinyin;currency=CNY".to_string())
+            .unwrap();
         assert_eq!(
             locale.to_string(),
             "en_US.UTF-8@collation=pinyin;currency=CNY".to_string()
