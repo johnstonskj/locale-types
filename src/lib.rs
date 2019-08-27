@@ -40,6 +40,14 @@ extern crate lazy_static;
 pub enum LocaleError {
     /// The provided locale string was badly formatted
     InvalidLocaleString,
+    /// The provided language code was not valid, or was unknown.
+    InvalidLanguageCode,
+    /// The provided territory code was not valid, or was unknown.
+    InvalidTerritoryCode,
+    /// The provided code set name was not valid, or was unknown.
+    InvalidCodeSet,
+    /// The provided modifier string was not valid, or was unknown.
+    InvalidModifier,
     /// The provided locale was unknown
     UnknownLocale,
     /// Locale category not set/or supported

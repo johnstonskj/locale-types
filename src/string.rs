@@ -73,13 +73,13 @@ pub enum ParseError {
     RegexFailure,
     /// The provided language code was not valid.
     InvalidLanguageCode,
-    /// The provided language code was not valid.
-    InvalidTerritoryCode,
     /// The provided territory code was not valid.
-    InvalidCodeSet,
+    InvalidTerritoryCode,
     /// The provided code set name was not valid.
-    InvalidModifier,
+    InvalidCodeSet,
     /// The provided modifier string was not valid.
+    InvalidModifier,
+    /// The provided file system path was not valid.
     InvalidPath,
 }
 
