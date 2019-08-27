@@ -51,6 +51,9 @@ use crate::id::LocaleIdentifier;
 // Public Types
 // ------------------------------------------------------------------------------------------------
 
+/// A `LocaleString` is a representation of the POSIX notion of a Locale
+/// identifier, used in operating system calls and environment variables.
+/// It implements the `LocaleIdentifier` trait.
 #[derive(Debug, PartialEq)]
 pub struct LocaleString {
     language_code: String,
@@ -59,15 +62,24 @@ pub struct LocaleString {
     modifier: Option<String>,
 }
 
+/// Errors possibly returned from `from_str()`.
 #[derive(Debug, PartialEq)]
 pub enum ParseError {
+    /// The empty string is not a valid identifier.
     EmptyString,
+    /// The value "POSIX" or "C" is not a locale identifier in this context.
     PosixUnsupported,
+    /// The string failed to match the internal regular expression(s).
     RegexFailure,
+    /// The provided language code was not valid.
     InvalidLanguageCode,
-    InvalidCountryCode,
+    /// The provided language code was not valid.
+    InvalidTerritoryCode,
+    /// The provided territory code was not valid.
     InvalidCodeSet,
+    /// The provided code set name was not valid.
     InvalidModifier,
+    /// The provided modifier string was not valid.
     InvalidPath,
 }
 
@@ -187,7 +199,7 @@ impl LocaleIdentifier for LocaleString {
 }
 
 impl Display for LocaleString {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",

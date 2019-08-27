@@ -21,9 +21,15 @@ println!("{}", locale);
 
 */
 
+#![warn(
+    missing_debug_implementations,
+    missing_docs,
+    unused_extern_crates,
+    rust_2018_idioms
+)]
+
 #[macro_use]
 extern crate lazy_static;
-extern crate regex;
 
 // ------------------------------------------------------------------------------------------------
 // Public Types
