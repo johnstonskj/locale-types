@@ -25,6 +25,7 @@ let locale = LocaleString::new("en".to_string()).unwrap()
 println!("{}", locale);
 ```
 
+See also the `locale-strict` crate for a validating implementation of `LocaleIdentifier`.
 ## History
 
 * **0.4.0** - updated the interface `LocaleIdentifier` to return LocaleError on constructor errors.
