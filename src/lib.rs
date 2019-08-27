@@ -10,9 +10,10 @@ standards-conformant manner.
 ## Example
 
 ```
-use locale_types::{LocaleIdentifier, LocaleString};
+use locale_types::LocaleIdentifier;
+use locale_strict::StrictLocaleString;
 
-let locale = LocaleString::new("en".to_string()).unwrap()
+let locale = StrictLocaleString::new("en".to_string()).unwrap()
     .with_territory("US".to_string()).unwrap()
     .with_code_set("UTF-8".to_string()).unwrap()
     .with_modifier("collation=pinyin;currency=CNY".to_string()).unwrap();
@@ -28,48 +29,10 @@ println!("{}", locale);
     rust_2018_idioms
 )]
 
-#[macro_use]
-extern crate lazy_static;
-
-// ------------------------------------------------------------------------------------------------
-// Public Types
-// ------------------------------------------------------------------------------------------------
-
-/// Common error type for functions in this crate.
-#[derive(Debug, PartialEq)]
-pub enum LocaleError {
-    /// The provided locale string was badly formatted
-    InvalidLocaleString,
-    /// The provided language code was not valid, or was unknown.
-    InvalidLanguageCode,
-    /// The provided territory code was not valid, or was unknown.
-    InvalidTerritoryCode,
-    /// The provided code set name was not valid, or was unknown.
-    InvalidCodeSet,
-    /// The provided modifier string was not valid, or was unknown.
-    InvalidModifier,
-    /// The provided locale was unknown
-    UnknownLocale,
-    /// Locale category not set/or supported
-    UnsetCategory,
-    /// Operating system could not set the specified locale
-    OSError,
-    /// The operation you tried to perform was not supported.
-    Unsupported,
-}
-
-/// Common result type for functions in this crate.
-pub type LocaleResult<T> = Result<T, LocaleError>;
 
 // ------------------------------------------------------------------------------------------------
 // Public Modules
 // ------------------------------------------------------------------------------------------------
 
-pub mod id;
-pub use id::LocaleIdentifier;
-
 pub mod string;
-pub use string::LocaleString;
-
-pub mod locale;
-pub use locale::Locale;
+pub use string::StrictLocaleString;
