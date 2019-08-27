@@ -18,14 +18,15 @@ It is used by the `locale-codes` and `locale-settings` crates.
 ```rust
 use locale_types::{LocaleIdentifier, LocaleString};
 
-let locale = LocaleString::new("en".to_string())
-    .with_territory("US".to_string())
-    .with_code_set("UTF-8".to_string())
-    .with_modifier("collation=pinyin;currency=CNY".to_string());
+let locale = LocaleString::new("en".to_string()).unwrap()
+    .with_territory("US".to_string()).unwrap()
+    .with_code_set("UTF-8".to_string()).unwrap()
+    .with_modifier("collation=pinyin;currency=CNY".to_string()).unwrap();
 println!("{}", locale);
 ```
 
 ## History
 
+* **0.4.0** - updated the interface `LocaleIdentifier` to return LocaleError on constructor errors.
 * **0.3.0** - updated module structure.
 * **0.1.0** - extracted from [simple-locale](https://github.com/johnstonskj/simple-locale).
