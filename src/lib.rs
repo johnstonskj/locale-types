@@ -1,11 +1,12 @@
 /*!
-Idiomatic types for locale identifiers.
+Idiomatic, strictly validated, types for locale identifiers.
 
-This crate provides a [`Locale`](locale/enum.Locale.html) enumeration,
-[`LocaleIdentifier`](id/trait.LocaleIdentifier.html) trait, and a
-[`LocaleString`](string/struct.LocaleString.html) structure are provided that
-may be used to parse and construct locale identifiers in a
-standards-conformant manner.
+This crate provides a _strict_ version of the `LocaleString` structure provided
+by the [locale-types](https://github.com/johnstonskj/locale-types) crate. For
+each of the fields _language code_, _territory_, and _code set_ the values
+passed to the constructors will be validated using the
+[locale-codes](https://github.com/johnstonskj/locale-codes) crate to ensure they
+are valid identifiers according to the corresponding standards.
 
 ## Example
 
@@ -28,7 +29,6 @@ println!("{}", locale);
     unused_extern_crates,
     rust_2018_idioms
 )]
-
 
 // ------------------------------------------------------------------------------------------------
 // Public Modules

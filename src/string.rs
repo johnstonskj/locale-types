@@ -1,5 +1,7 @@
 /*!
-The `LocaleString` type provides the a structure for locale identifier strings.
+The `StrictLocaleString` type provides a `LocaleIdentifier` that validates
+that language, territory, and code set identifiers are present in the
+corresponding standards.
 
 */
 use std::collections::HashMap;
@@ -7,19 +9,17 @@ use std::fmt;
 use std::fmt::Display;
 use std::str::FromStr;
 
-use locale_types::{LocaleError, LocaleIdentifier, LocaleResult, LocaleString};
-use locale_types::string::ParseError;
 use locale_codes::{codeset, country, language};
+use locale_types::string::ParseError;
+use locale_types::{LocaleError, LocaleIdentifier, LocaleResult, LocaleString};
 
 // ------------------------------------------------------------------------------------------------
 // Public Types
 // ------------------------------------------------------------------------------------------------
 
-/// A `StringLocaleString` is a representation of the POSIX notion of a Locale
-/// identifier, used in operating system calls and environment variables.
-/// It implements the `LocaleIdentifier` trait.
+/// A `StringLocaleString` is a wrapper around `LocaleString`.
 #[derive(Debug, PartialEq)]
-pub struct StrictLocaleString (LocaleString);
+pub struct StrictLocaleString(LocaleString);
 
 // ------------------------------------------------------------------------------------------------
 // Implementations - LocaleString
@@ -29,47 +29,33 @@ impl LocaleIdentifier for StrictLocaleString {
     fn new(language_code: String) -> LocaleResult<Self> {
         match language::lookup(&language_code) {
             None => Err(LocaleError::InvalidLanguageCode),
-            Some(_) =>
-                Ok(StrictLocaleString(
-                    LocaleString::new(language_code)?
-                )),
+            Some(_) => Ok(StrictLocaleString(LocaleString::new(language_code)?)),
         }
     }
 
     fn with_language(&self, language_code: String) -> LocaleResult<Self> {
         match language::lookup(&language_code) {
             None => Err(LocaleError::InvalidLanguageCode),
-            Some(_) =>
-                Ok(StrictLocaleString(
-                    self.0.with_language(language_code)?
-                )),
+            Some(_) => Ok(StrictLocaleString(self.0.with_language(language_code)?)),
         }
     }
 
     fn with_territory(&self, territory: String) -> LocaleResult<Self> {
         match country::lookup(&territory) {
             None => Err(LocaleError::InvalidTerritoryCode),
-            Some(_) =>
-                Ok(StrictLocaleString(
-                    self.0.with_territory(territory)?
-                )),
+            Some(_) => Ok(StrictLocaleString(self.0.with_territory(territory)?)),
         }
     }
 
     fn with_code_set(&self, code_set: String) -> LocaleResult<Self> {
         match codeset::lookup(&code_set) {
             None => Err(LocaleError::InvalidCodeSet),
-            Some(_) =>
-                Ok(StrictLocaleString(
-                    self.0.with_code_set(code_set)?
-                )),
+            Some(_) => Ok(StrictLocaleString(self.0.with_code_set(code_set)?)),
         }
     }
 
     fn with_modifier(&self, modifier: String) -> LocaleResult<Self> {
-        Ok(StrictLocaleString(
-            self.0.with_modifier(modifier)?
-        ))
+        Ok(StrictLocaleString(self.0.with_modifier(modifier)?))
     }
 
     fn with_modifiers<K, V>(&self, modifiers: HashMap<K, V>) -> LocaleResult<Self>
@@ -77,9 +63,7 @@ impl LocaleIdentifier for StrictLocaleString {
         K: Display,
         V: Display,
     {
-        Ok(StrictLocaleString(
-            self.0.with_modifiers(modifiers)?
-        ))
+        Ok(StrictLocaleString(self.0.with_modifiers(modifiers)?))
     }
 
     fn language_code(&self) -> String {
@@ -100,7 +84,7 @@ impl LocaleIdentifier for StrictLocaleString {
 }
 
 impl Display for StrictLocaleString {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.0)
     }
 }
@@ -123,7 +107,7 @@ impl FromStr for StrictLocaleString {
                     strict = strict.with_modifier(modifier).unwrap();
                 }
                 Ok(strict)
-            },
+            }
         }
     }
 }
@@ -136,8 +120,8 @@ impl FromStr for StrictLocaleString {
 mod tests {
     use std::str::FromStr;
 
-    use locale_types::{LocaleError, LocaleIdentifier};
     use crate::StrictLocaleString;
+    use locale_types::{LocaleError, LocaleIdentifier};
 
     // --------------------------------------------------------------------------------------------
     #[test]
@@ -272,4 +256,3 @@ mod tests {
         }
     }
 }
-
