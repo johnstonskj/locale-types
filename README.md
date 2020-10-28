@@ -1,10 +1,11 @@
 # Crate locale-types
 
-[![travis.ci](https://travis-ci.org/johnstonskj/locale-types.svg?branch=master)](https://travis-ci.org/johnstonskj/locale-types)
+![mit License](https://img.shields.io/badge/license-mit-118811.svg)
+![Minimum Rust Version](https://img.shields.io/badge/Min%20Rust-1.34-green.svg)
 [![crates.io](https://img.shields.io/crates/v/locale-types.svg)](https://crates.io/crates/locale-types)
 [![docs.rs](https://docs.rs/locale-types/badge.svg)](https://docs.rs/locale-types)
-![Minimum Rust Version](https://img.shields.io/badge/Min%20Rust-1.34-green.svg)
-![mit License](https://img.shields.io/badge/license-mit-118811.svg)
+![Build](https://github.com/johnstonskj/locale-types/workflows/Rust/badge.svg)
+![Audit](https://github.com/johnstonskj/locale-types/workflows/Security%20audit/badge.svg)
 [![GitHub stars](https://img.shields.io/github/stars/johnstonskj/locale-types.svg)](https://github.com/johnstonskj/locale-types/stargazers)
 
 This crate provides a `Locale` enumeration, `LocaleIdentifier` trait, and a 
